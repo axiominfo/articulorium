@@ -7,9 +7,5 @@ spring:
     user: artemis
     password: artemis
 
-  data:
-    solr:
-      host: http://localhost:8983/solr
-
   main:
     web-application-type: NONE

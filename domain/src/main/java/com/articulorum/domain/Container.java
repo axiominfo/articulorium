@@ -30,7 +30,7 @@ public class Container {
     @Id
     private UUID id;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String path;
 
     @ElementCollection
