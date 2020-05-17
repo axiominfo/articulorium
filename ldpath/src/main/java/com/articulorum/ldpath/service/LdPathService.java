@@ -47,6 +47,7 @@ public class LdPathService {
         RDFParserRegistry.getInstance().add(new RDFJSONParserFactory());
         RDFParserRegistry.getInstance().add(new SesameRDFaParserFactory());
         RDFParserRegistry.getInstance().add(new TriGParserFactory());
+
         BooleanQueryResultParserRegistry.getInstance().add(new SPARQLBooleanXMLParserFactory());
         TupleQueryResultParserRegistry.getInstance().add(new SPARQLResultsXMLParserFactory());
 

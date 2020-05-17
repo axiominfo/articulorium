@@ -1,8 +1,5 @@
 package com.articulorum.ldpath.config;
 
-import static java.lang.String.join;
-import static org.apache.commons.lang3.StringUtils.removeEnd;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -12,6 +9,7 @@ import org.apache.marmotta.ldcache.backend.file.LDCachingFileBackend;
 import org.apache.marmotta.ldcache.model.CacheConfiguration;
 import org.apache.marmotta.ldcache.services.LDCache;
 import org.apache.marmotta.ldclient.api.endpoint.Endpoint;
+import org.apache.marmotta.ldclient.api.provider.DataProvider;
 import org.apache.marmotta.ldclient.endpoint.rdf.LinkedDataEndpoint;
 import org.apache.marmotta.ldclient.model.ClientConfiguration;
 import org.apache.marmotta.ldclient.provider.rdf.CacheProvider;
@@ -26,13 +24,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class LdPathConfig {
 
+    private final static String ARTICULORUM_PROVIDER_NAME = "Articulorum Data Provider";
+
     @Value("${ldpath.namespace:Articulorum Web API}")
     private String name;
 
     @Value("${ldpath.namespace:http://localhost:8080}")
     private String namespace;
 
-    @Value("${ldpath.defaultExpiry:6000}")
+    @Value("${ldpath.defaultExpiry:5}")
     private Long defaultExpiry;
 
     @Value("${ldpath.cache.location:cache}")
@@ -40,16 +40,31 @@ public class LdPathConfig {
 
     @Bean
     public LDCachingBackend cachingBackend() throws IOException {
-        LDCachingBackend backend = new LDCachingFileBackend(new File(cacheLocation));
+        File cache = new File(cacheLocation);
+        if (!cache.exists()) {
+            cache.mkdir();
+        }
+        LDCachingBackend backend = new LDCachingFileBackend(cache);
         backend.initialize();
         return backend;
     }
 
     @Bean
+    public DataProvider provider() {
+        return new LinkedDataProvider() {
+            @Override
+            public String getName() {
+                return ARTICULORUM_PROVIDER_NAME;
+            }
+        };
+    }
+
+    @Bean
     public Endpoint endpoint() {
-        String uriPattern = join("/", removeEnd(namespace, "/"), ".*", "/");
-        String type = LinkedDataProvider.PROVIDER_NAME;
-        Endpoint endpoint = new Endpoint(name, type, uriPattern, null, defaultExpiry);
+        String uriPattern = "*";
+        String endpointUrl = namespace;
+        String type = ARTICULORUM_PROVIDER_NAME;
+        Endpoint endpoint = new Endpoint(name, type, uriPattern, endpointUrl, defaultExpiry);
         endpoint.setPriority(Endpoint.PRIORITY_HIGH);
         endpoint.addContentType(new ContentType("text", "turtle", 1.0));
         endpoint.addContentType(new ContentType("text", "n3", 0.8));
@@ -61,15 +76,13 @@ public class LdPathConfig {
     @Bean
     public ClientConfiguration clientConfiguration() {
         final ClientConfiguration client = new ClientConfiguration();
-
         client.addProvider(new LinkedDataProvider());
         client.addProvider(new CacheProvider());
         client.addProvider(new RegexUriProvider());
         client.addProvider(new SPARQLProvider());
-
+        client.addProvider(provider());
         client.addEndpoint(new LinkedDataEndpoint());
         client.addEndpoint(endpoint());
-
         return client;
     }
 
