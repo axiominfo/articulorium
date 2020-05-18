@@ -1,5 +1,9 @@
 package com.articulorum.ldpath.service;
 
+import static java.lang.String.join;
+import static org.apache.commons.lang3.StringUtils.removeEnd;
+import static org.apache.commons.lang3.StringUtils.removeStart;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,6 +38,9 @@ public class LdPathService {
 
     private final LDPath<org.openrdf.model.Value> ldpath;
 
+    @Value("${ldpath.namespace:http://localhost:8080}")
+    private String namespace;
+
     @Value("classpath:default.ldpath")
     private Resource defaultProgram;
 
@@ -54,12 +61,15 @@ public class LdPathService {
         ldpath = new LDPath<>(backend);
     }
 
-    public Map<String, Collection<?>> programQuery(final String uri) throws LDPathParseException, IOException {
-        return programQuery(uri, defaultProgram.getInputStream());
+    public Map<String, Collection<?>> programQuery(final String path) throws LDPathParseException, IOException {
+        return programQuery(path, defaultProgram.getInputStream());
     }
 
-    public Map<String, Collection<?>> programQuery(final String uri, final InputStream program) throws LDPathParseException, IOException {
-        return ldpath.programQuery(new URIImpl(uri), new InputStreamReader(program));
+    public Map<String, Collection<?>> programQuery(final String path, final InputStream program) throws LDPathParseException, IOException {
+        String uri = join("/", removeEnd(namespace, "/"), removeStart(path, "/"));
+        Map<String, Collection<?>> document = ldpath.programQuery(new URIImpl(uri), new InputStreamReader(program));
+        document.values().removeIf(value -> value.isEmpty());
+        return document;
     }
 
 }

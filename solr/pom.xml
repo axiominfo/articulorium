@@ -18,7 +18,9 @@
 
   <packaging>jar</packaging>
 
-  <properties></properties>
+  <properties>
+    <solrj.version>8.5.1</solrj.version>
+  </properties>
 
   <dependencies>
 
@@ -36,6 +38,12 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-artemis</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.solr</groupId>
+      <artifactId>solr-solrj</artifactId>
+      <version>${solrj.version}</version>
     </dependency>
 
 

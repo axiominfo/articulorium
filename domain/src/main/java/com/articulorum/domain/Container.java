@@ -1,7 +1,5 @@
 package com.articulorum.domain;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
-
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -15,22 +13,19 @@ import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @NoArgsConstructor
-@JsonInclude(NON_EMPTY)
 @Table(name = "containers", indexes = { @Index(name = "path_index", columnList = "path", unique = true) })
 public class Container {
 
     @Id
     private UUID id;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String path;
 
     @ElementCollection

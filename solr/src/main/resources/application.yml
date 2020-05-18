@@ -1,3 +1,11 @@
+solr:
+  hosts:
+    - http://localhost:8981/solr
+    - http://localhost:8982/solr
+    - http://localhost:8983/solr
+  connectionTimeout: 10000
+  socketTimeout: 60000
+
 spring:
 
   artemis:

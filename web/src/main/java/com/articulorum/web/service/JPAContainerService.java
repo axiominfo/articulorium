@@ -12,8 +12,7 @@ import java.util.Optional;
 import com.articulorum.domain.Container;
 import com.articulorum.domain.Element;
 import com.articulorum.domain.repo.ContainerRepo;
-import com.articulorum.messaging.producer.EventProducer;
-import com.articulorum.web.service.ContainerService;
+import com.articulorum.web.producer.ContainerProducer;
 import com.articulorum.web.utility.LdpPredicate;
 import com.articulorum.web.utility.RdfType;
 
@@ -21,13 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class JPAContainerService implements ContainerService {
+public class JpaContainerService implements ContainerService {
 
     @Autowired
     private ContainerRepo containerRepo;
 
     @Autowired
-    private EventProducer eventProducer;
+    private ContainerProducer eventProducer;
 
     @Override
     public boolean existsByPath(String path) {
@@ -157,8 +156,6 @@ public class JPAContainerService implements ContainerService {
         // delete
         containerRepo.delete(container);
         eventProducer.sendDeleted(container);
-
-        throw new RuntimeException("Do not delete or send messages!");
     }
 
 }
