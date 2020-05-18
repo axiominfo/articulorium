@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.articulorum.ldpath.service.LdPathService;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.marmotta.ldpath.exception.LDPathParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,14 +26,14 @@ public class LdPathController {
 
     @GetMapping("/")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody Map<String, Collection<?>> get(@RequestParam(required = true) String uri) throws LDPathParseException, IOException {
-        return ldpathService.programQuery(uri);
+    public @ResponseBody Map<String, Collection<?>> get(@RequestParam(required = true, defaultValue = StringUtils.EMPTY) String path) throws LDPathParseException, IOException {
+        return ldpathService.programQuery(path);
     }
 
     @PostMapping("/")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody Map<String, Collection<?>> get(@RequestParam(required = true) String uri, InputStream program) throws LDPathParseException, IOException {
-        return ldpathService.programQuery(uri, program);
+    public @ResponseBody Map<String, Collection<?>> get(@RequestParam(required = true, defaultValue = StringUtils.EMPTY) String path, InputStream program) throws LDPathParseException, IOException {
+        return ldpathService.programQuery(path, program);
     }
 
 }
