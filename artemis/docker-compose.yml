@@ -1,0 +1,16 @@
+# https://hub.docker.com/r/vromero/activemq-artemis
+#
+# docker-compose up
+#
+
+version: '3.8'
+services:
+  solr1:
+    image: vromero/activemq-artemis:latest
+    container_name: artemis
+    ports:
+     - 8161:8161
+     - 61616:61616
+    environment:
+      - ARTEMIS_USERNAME=artemis
+      - ARTEMIS_PASSWORD=artemis

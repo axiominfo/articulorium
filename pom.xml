@@ -23,7 +23,7 @@
   <modules>
     <module>domain</module>
     <module>messaging</module>
-    <module>web</module>
+    <module>api</module>
     <module>ldpath</module>
     <module>solr</module>
   </modules>
