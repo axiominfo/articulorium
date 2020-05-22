@@ -26,7 +26,7 @@ public class SolrCollectionService {
     }
 
     public CollectionAdminResponse createCollection(String name) throws SolrServerException, IOException {
-        Create create = CollectionAdminRequest.createCollection(name, 3, 3);
+        Create create = CollectionAdminRequest.createCollection(name, 1, 1);
         return create.process(solrClient);
     }
 
