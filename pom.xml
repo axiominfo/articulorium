@@ -25,15 +25,12 @@
     <module>messaging</module>
     <module>api</module>
     <module>ldpath</module>
-    <module>solr</module>
+    <module>index</module>
   </modules>
 
   <packaging>pom</packaging>
 
   <properties>
-    <java.version>14</java.version>
-    <maven.compiler.source>${java.version}</maven.compiler.source>
-    <maven.compiler.target>${java.version}</maven.compiler.target>
     <com.build.sourceEncoding>UTF-8</com.build.sourceEncoding>
   </properties>
 

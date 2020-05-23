@@ -1,4 +1,4 @@
-package com.articulorum.solr.config.model;
+package com.articulorum.index.config.model;
 
 import java.util.ArrayList;
 import java.util.List;

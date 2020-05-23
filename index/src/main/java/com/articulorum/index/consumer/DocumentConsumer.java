@@ -1,4 +1,4 @@
-package com.articulorum.solr.consumer;
+package com.articulorum.index.consumer;
 
 import java.util.Map;
 

@@ -1,6 +1,6 @@
-package com.articulorum.solr.config;
+package com.articulorum.index.config;
 
-import com.articulorum.solr.service.SolrCollectionService;
+import com.articulorum.index.service.SolrCollectionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;

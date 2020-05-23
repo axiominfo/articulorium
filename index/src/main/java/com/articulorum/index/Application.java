@@ -1,6 +1,6 @@
-package com.articulorum.solr;
+package com.articulorum.index;
 
-import com.articulorum.solr.config.model.SolrConfig;
+import com.articulorum.index.config.model.SolrConfig;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.CloudSolrClient;

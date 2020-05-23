@@ -29,7 +29,7 @@ public class LdPathConfig {
     @Value("${ldpath.namespace:Articulorum Web API}")
     private String name;
 
-    @Value("${ldpath.namespace:http://localhost:8080}")
+    @Value("${ldpath.namespace:http://api:8080}")
     private String namespace;
 
     @Value("${ldpath.defaultExpiry:5}")

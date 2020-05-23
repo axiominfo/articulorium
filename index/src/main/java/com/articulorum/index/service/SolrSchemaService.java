@@ -1,4 +1,4 @@
-package com.articulorum.solr.service;
+package com.articulorum.index.service;
 
 import org.springframework.stereotype.Service;
 
