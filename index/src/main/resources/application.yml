@@ -20,4 +20,5 @@ spring:
     password: artemis
 
   main:
+    lazy-initialization: false
     web-application-type: NONE

@@ -40,3 +40,6 @@ spring:
       ddl-auto: update
     open-in-view: false
     show-sql: false
+
+  main:
+    lazy-initialization: true

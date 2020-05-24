@@ -10,7 +10,6 @@ services:
   api:
     container_name: api
     build:
-      # build from Dockerfile
       context: ./api
       dockerfile: Dockerfile
     ports:
@@ -20,11 +19,11 @@ services:
     depends_on:
       - artemis
       - index
+      - triplestore
 
   ldpath:
     container_name: ldpath
     build:
-      # build from Dockerfile
       context: ./ldpath
       dockerfile: Dockerfile
     ports:
@@ -37,7 +36,6 @@ services:
   index:
     container_name: index
     build:
-      # build from Dockerfile
       context: ./index
       dockerfile: Dockerfile
     networks:
@@ -47,6 +45,17 @@ services:
       - solr1
       - solr2
       - solr3
+
+  triplestore:
+    container_name: triplestore
+    build:
+      context: ./triplestore
+      dockerfile: Dockerfile
+    networks:
+      - articulorum
+    depends_on:
+      - artemis
+      - blazegraph
 
   artemis:
     image: vromero/activemq-artemis:latest
@@ -139,6 +148,15 @@ services:
     environment:
       ZOO_MY_ID: 3
       ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2181 server.3=0.0.0.0:2888:3888;2181
+    networks:
+      - articulorum
+
+  blazegraph:
+    image: lyrasis/blazegraph:2.1.5
+    container_name: blazegraph
+    hostname: blazegraph
+    ports:
+      - 8889:8080
     networks:
       - articulorum
 

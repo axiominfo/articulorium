@@ -17,15 +17,8 @@ public class DocumentConsumer {
     @JmsListener(destination = "index")
     public void receiveCreated(Map<String, Object> document) {
         System.out.println("index: " + document);
-
-        SolrInputDocument solrInDoc = new SolrInputDocument();
-        for (Map.Entry<String, Object> entry : document.entrySet()) {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            solrInDoc.addField(key, value);
-        }
         try {
-            solrClient.add("test", solrInDoc);
+            solrClient.add("test", toSolrInputDocument(document));
             solrClient.commit("test");
         } catch (Exception e) {
             e.printStackTrace();
@@ -35,11 +28,33 @@ public class DocumentConsumer {
     @JmsListener(destination = "reindex")
     public void receiveUpdated(Map<String, Object> document) {
         System.out.println("reindex: " + document);
+        try {
+            solrClient.add("test", toSolrInputDocument(document));
+            solrClient.commit("test");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @JmsListener(destination = "unindex")
     public void receiveDeleted(Map<String, Object> document) {
         System.out.println("unindex: " + document);
+        String id = (String) document.get("id");
+        try {
+            solrClient.deleteById("test", id);
+            solrClient.commit("test");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
+    private SolrInputDocument toSolrInputDocument(Map<String, Object> document) {
+        SolrInputDocument solrInDoc = new SolrInputDocument();
+        for (Map.Entry<String, Object> entry : document.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            solrInDoc.addField(key, value);
+        }
+        return solrInDoc;
+    }
 }

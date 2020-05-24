@@ -16,3 +16,6 @@ spring:
     add-properties: false
     restart:
       enabled: true
+
+  main:
+    lazy-initialization: false
