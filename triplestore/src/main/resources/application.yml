@@ -1,3 +1,7 @@
+blazegraph:
+  service-url: http://blazegraph:8080/bigdata
+  use-lbs: false
+
 spring:
 
   artemis:

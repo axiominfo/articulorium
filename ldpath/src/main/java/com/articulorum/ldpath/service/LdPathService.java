@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.Map;
 
+import com.articulorum.ldpath.config.model.LdPathConfig;
 import com.github.jsonldjava.sesame.SesameJSONLDParserFactory;
 
 import org.apache.marmotta.ldpath.LDPath;
@@ -38,8 +39,8 @@ public class LdPathService {
 
     private final LDPath<org.openrdf.model.Value> ldpath;
 
-    @Value("${ldpath.namespace:http://api:8080}")
-    private String namespace;
+    @Autowired
+    private LdPathConfig ldPathConfig;
 
     @Value("classpath:default.ldpath")
     private Resource defaultProgram;
@@ -54,10 +55,8 @@ public class LdPathService {
         RDFParserRegistry.getInstance().add(new RDFJSONParserFactory());
         RDFParserRegistry.getInstance().add(new SesameRDFaParserFactory());
         RDFParserRegistry.getInstance().add(new TriGParserFactory());
-
         BooleanQueryResultParserRegistry.getInstance().add(new SPARQLBooleanXMLParserFactory());
         TupleQueryResultParserRegistry.getInstance().add(new SPARQLResultsXMLParserFactory());
-
         ldpath = new LDPath<>(backend);
     }
 
@@ -66,7 +65,7 @@ public class LdPathService {
     }
 
     public Map<String, Collection<?>> programQuery(final String path, final InputStream program) throws LDPathParseException, IOException {
-        String uri = join("/", removeEnd(namespace, "/"), removeStart(path, "/"));
+        String uri = join("/", removeEnd(ldPathConfig.getNamespace(), "/"), removeStart(path, "/"));
         Map<String, Collection<?>> document = ldpath.programQuery(new URIImpl(uri), new InputStreamReader(program));
         document.values().removeIf(value -> value.isEmpty());
         return document;

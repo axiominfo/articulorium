@@ -3,12 +3,12 @@ solr:
     - http://solr1:8983/solr
     - http://solr2:8983/solr
     - http://solr3:8983/solr
-  zkHosts:
+  zk-hosts:
     - zoo1:2181
     - zoo2:2181
     - zoo3:2181
-  connectionTimeout: 15000
-  socketTimeout: 600000
+  connection-timeout: 15000
+  socket-timeout: 600000
 
 spring:
 

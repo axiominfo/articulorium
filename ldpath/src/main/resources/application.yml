@@ -1,3 +1,9 @@
+ldpath:
+  name: Articulorum Web API
+  namespace: http://api:8080
+  default-expiry: 5
+  cache-location: cache
+
 server:
   port: 8081
   servlet:

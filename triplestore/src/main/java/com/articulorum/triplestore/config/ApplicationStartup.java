@@ -2,8 +2,6 @@ package com.articulorum.triplestore.config;
 
 import java.util.Properties;
 
-import com.bigdata.journal.BufferMode;
-import com.bigdata.journal.Journal;
 import com.bigdata.rdf.sail.webapp.SD;
 import com.bigdata.rdf.sail.webapp.client.RemoteRepositoryManager;
 

@@ -16,7 +16,7 @@ public class Application {
 
     @Bean
     public RemoteRepositoryManager getRemoteRepositoryManager(BlazegraphConfig blazegraphConfig) {
-        return new RemoteRepositoryManager(blazegraphConfig.getServiceUrl() , blazegraphConfig.getUseLBS());
+        return new RemoteRepositoryManager(blazegraphConfig.getServiceUrl() , blazegraphConfig.getUseLbs());
     }
 
 }

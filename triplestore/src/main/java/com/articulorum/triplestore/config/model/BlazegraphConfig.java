@@ -14,6 +14,6 @@ public class BlazegraphConfig {
 
     private String serviceUrl = "http://blazegraph:8080/bigdata";
 
-    private Boolean useLBS = false;
+    private Boolean useLbs = false;
 
 }
