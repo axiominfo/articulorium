@@ -35,6 +35,9 @@ spring:
     serialization:
       indent-output: true
 
+  jms:
+    pub-sub-domain: true
+
   jpa:
     hibernate:
       ddl-auto: update

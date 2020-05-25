@@ -17,5 +17,8 @@ spring:
     restart:
       enabled: true
 
+  jms:
+    pub-sub-domain: true
+
   main:
     lazy-initialization: false

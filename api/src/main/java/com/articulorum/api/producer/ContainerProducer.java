@@ -21,17 +21,17 @@ public class ContainerProducer {
 
     public void sendCreated(Container container) {
         System.out.println("created: " + container);
-        jmsTemplate.convertAndSend("created", container);
+        jmsTemplate.convertAndSend("topic.created", container);
     }
 
     public void sendUpdated(Container container) {
         System.out.println("updated: " + container);
-        jmsTemplate.convertAndSend("updated", container);
+        jmsTemplate.convertAndSend("topic.updated", container);
     }
 
     public void sendDeleted(Container container) {
         System.out.println("deleted: " + container);
-        jmsTemplate.convertAndSend("deleted", container);
+        jmsTemplate.convertAndSend("topic.deleted", container);
     }
 
 }

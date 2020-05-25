@@ -6,6 +6,7 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,8 +15,8 @@ public class DocumentConsumer {
     @Autowired
     private SolrClient solrClient;
 
-    @JmsListener(destination = "index")
-    public void receiveCreated(Map<String, Object> document) {
+    @JmsListener(destination = "topic.index")
+    public void receiveCreated(@Payload Map<String, Object> document) {
         System.out.println("index: " + document);
         try {
             solrClient.add("test", toSolrInputDocument(document));
@@ -25,8 +26,8 @@ public class DocumentConsumer {
         }
     }
 
-    @JmsListener(destination = "reindex")
-    public void receiveUpdated(Map<String, Object> document) {
+    @JmsListener(destination = "topic.reindex")
+    public void receiveUpdated(@Payload Map<String, Object> document) {
         System.out.println("reindex: " + document);
         try {
             solrClient.add("test", toSolrInputDocument(document));
@@ -36,8 +37,8 @@ public class DocumentConsumer {
         }
     }
 
-    @JmsListener(destination = "unindex")
-    public void receiveDeleted(Map<String, Object> document) {
+    @JmsListener(destination = "topic.unindex")
+    public void receiveDeleted(@Payload Map<String, Object> document) {
         System.out.println("unindex: " + document);
         String id = (String) document.get("id");
         try {

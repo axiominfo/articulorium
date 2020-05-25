@@ -19,6 +19,9 @@ spring:
     user: artemis
     password: artemis
 
+  jms:
+    pub-sub-domain: true
+
   main:
     lazy-initialization: false
     web-application-type: NONE
