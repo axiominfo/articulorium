@@ -2,10 +2,8 @@ package com.articulorum.triplestore.consumer;
 
 import com.articulorum.domain.Container;
 import com.articulorum.domain.Element;
-import com.bigdata.rdf.sail.remote.BigdataSailRemoteRepository;
+import com.articulorum.triplestore.service.RemoteRepositoryService;
 import com.bigdata.rdf.sail.remote.BigdataSailRemoteRepositoryConnection;
-import com.bigdata.rdf.sail.webapp.client.RemoteRepository;
-import com.bigdata.rdf.sail.webapp.client.RemoteRepositoryManager;
 
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
@@ -24,30 +22,16 @@ import org.springframework.stereotype.Component;
 public class ContainerConsumer {
 
     @Autowired
-    private RemoteRepositoryManager remoteRepositoryManager;
+    private RemoteRepositoryService remoteRepositoryService;
 
     @JmsListener(destination = "topic.created")
     public void receiveCreated(@Payload Container container) {
         System.out.println("created: " + container);
-
-        RemoteRepository remoteRepository = remoteRepositoryManager.getRepositoryForNamespace("test");
-        BigdataSailRemoteRepository repo = remoteRepository.getBigdataSailRemoteRepository();
         try {
-            repo.initialize();
-            BigdataSailRemoteRepositoryConnection connection = repo.getConnection();
-
+            BigdataSailRemoteRepositoryConnection connection = remoteRepositoryService.getConnection();
             connection.begin();
-
-            Resource s = new URIImpl("http://localhost:8080/" + container.getPath());
-            for (Element element : container.getElements()) {
-                URI p = new URIImpl(element.getAttribute());
-                Value o = new LiteralImpl(element.getValue());
-                Statement stmt = new StatementImpl(s, p, o);
-                connection.add(stmt);
-            }
-
+            addStatements(connection, container);
             connection.commit();
-
             connection.close();
         } catch (RepositoryException e) {
             e.printStackTrace();
@@ -57,29 +41,11 @@ public class ContainerConsumer {
     @JmsListener(destination = "topic.updated")
     public void receiveUpdated(@Payload Container container) {
         System.out.println("updated: " + container);
-
-
-        RemoteRepository remoteRepository = remoteRepositoryManager.getRepositoryForNamespace("test");
-        BigdataSailRemoteRepository repo = remoteRepository.getBigdataSailRemoteRepository();
         try {
-            repo.initialize();
-            BigdataSailRemoteRepositoryConnection connection = repo.getConnection();
-
+            BigdataSailRemoteRepositoryConnection connection = remoteRepositoryService.getConnection();
             connection.begin();
-
-            Resource s = new URIImpl("http://localhost:8080/" + container.getPath());
-
-            connection.clear(s);
-
-            for (Element element : container.getElements()) {
-                URI p = new URIImpl(element.getAttribute());
-                Value o = new LiteralImpl(element.getValue());
-                Statement stmt = new StatementImpl(s, p, o);
-                connection.add(stmt);
-            }
-
+            addStatements(connection, container, true);
             connection.commit();
-
             connection.close();
         } catch (RepositoryException e) {
             e.printStackTrace();
@@ -89,24 +55,31 @@ public class ContainerConsumer {
     @JmsListener(destination = "topic.deleted")
     public void receiveDeleted(@Payload Container container) {
         System.out.println("deleted: " + container);
-
-        RemoteRepository remoteRepository = remoteRepositoryManager.getRepositoryForNamespace("test");
-        BigdataSailRemoteRepository repo = remoteRepository.getBigdataSailRemoteRepository();
         try {
-            repo.initialize();
-            BigdataSailRemoteRepositoryConnection connection = repo.getConnection();
-
+            BigdataSailRemoteRepositoryConnection connection = remoteRepositoryService.getConnection();
             connection.begin();
-
-            Resource s = new URIImpl("http://localhost:8080/" + container.getPath());
-
-            connection.clear(s);
-
+            connection.clear(new URIImpl("http://localhost:8080/" + container.getPath()));
             connection.commit();
-
             connection.close();
         } catch (RepositoryException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void addStatements(BigdataSailRemoteRepositoryConnection connection, Container container) throws RepositoryException {
+        addStatements(connection, container, false);
+    }
+
+    private void addStatements(BigdataSailRemoteRepositoryConnection connection, Container container, boolean clear) throws RepositoryException {
+        Resource s = new URIImpl("http://localhost:8080/" + container.getPath());
+        if (clear) {
+            connection.clear(s);
+        }
+        for (Element element : container.getElements()) {
+            URI p = new URIImpl(element.getAttribute());
+            Value o = new LiteralImpl(element.getValue());
+            Statement stmt = new StatementImpl(s, p, o);
+            connection.add(stmt);
         }
     }
 
