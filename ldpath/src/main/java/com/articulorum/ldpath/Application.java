@@ -21,8 +21,10 @@ import org.apache.marmotta.ldclient.provider.rdf.SPARQLProvider;
 import org.apache.marmotta.ldpath.backend.linkeddata.LDCacheBackend;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 
+@EnableEurekaClient
 @SpringBootApplication(scanBasePackages = "com.articulorum" )
 public class Application {
 

@@ -7,5 +7,8 @@ WORKDIR /articulorum/api
 # copy over the built artifact
 COPY ./target/api*.jar ./articulorum-api.jar
 
+COPY ./wait-for-it.sh ./wait-for-it.sh
+RUN chmod +x wait-for-it.sh
+
 # set the startup command to run your binary
-CMD ["java", "-jar", "./articulorum-api.jar"]
+CMD ["./wait-for-it.sh", "http://eureka:8761/eureka", "--", "java", "-jar", "./articulorum-api.jar"]

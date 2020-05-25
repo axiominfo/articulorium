@@ -10,7 +10,17 @@ solr:
   connection-timeout: 15000
   socket-timeout: 600000
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:8761/eureka
+  instance:
+    preferIpAddress: true
+
 spring:
+
+  application:
+    name: index
 
   artemis:
     mode: native

@@ -17,6 +17,7 @@ services:
     networks:
       - articulorum
     depends_on:
+      - eureka
       - artemis
       - index
       - triplestore
@@ -31,6 +32,7 @@ services:
     networks:
       - articulorum
     depends_on:
+      - eureka
       - artemis
 
   index:
@@ -41,6 +43,7 @@ services:
     networks:
       - articulorum
     depends_on:
+      - eureka
       - artemis
       - solr1
       - solr2
@@ -54,8 +57,19 @@ services:
     networks:
       - articulorum
     depends_on:
+      - eureka
       - artemis
       - blazegraph
+
+  eureka:
+    container_name: eureka
+    build:
+      context: ./eureka
+      dockerfile: Dockerfile
+    ports:
+      - 8761:8761
+    networks:
+      - articulorum
 
   artemis:
     image: vromero/activemq-artemis:latest
