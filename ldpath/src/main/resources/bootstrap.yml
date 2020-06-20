@@ -14,7 +14,7 @@ spring:
 
       discovery:
         healthCheckPath: /actuator/health
-        healthCheckInterval: 60s
+        healthCheckInterval: 30s
         instanceId: ${spring.application.name}:${random.value}
         serviceName: articulorum-${spring.application.name}
 

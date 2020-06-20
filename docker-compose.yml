@@ -9,10 +9,12 @@ services:
 
   config:
     container_name: config
+    hostname: config
     build:
       context: ./config
       dockerfile: Dockerfile
     ports:
+      - 8000:8000
       - 9000:9000
     networks:
       - cloud
@@ -21,10 +23,12 @@ services:
 
   discovery:
     container_name: discovery
+    hostname: discovery
     build:
       context: ./discovery
       dockerfile: Dockerfile
     ports:
+      - 8001:8000
       - 9001:9000
     networks:
       - cloud
@@ -33,10 +37,12 @@ services:
 
   gateway:
     container_name: gateway
+    hostname: gateway
     build:
       context: ./gateway
       dockerfile: Dockerfile
     ports:
+      - 8002:8000
       - 9002:9000
     networks:
       - cloud
@@ -45,10 +51,12 @@ services:
 
   ldp:
     container_name: ldp
+    hostname: ldp
     build:
       context: ./ldp
       dockerfile: Dockerfile
     ports:
+      - 8003:8000
       - 9003:9000
     networks:
       - cloud
@@ -58,10 +66,12 @@ services:
 
   ldpath:
     container_name: ldpath
+    hostname: ldpath
     build:
       context: ./ldpath
       dockerfile: Dockerfile
     ports:
+      - 8004:8000
       - 9004:9000
     networks:
       - cloud
@@ -72,10 +82,12 @@ services:
 
   index:
     container_name: index
+    hostname: index
     build:
       context: ./index
       dockerfile: Dockerfile
     ports:
+      - 8005:8000
       - 9005:9000
     networks:
       - cloud
@@ -88,10 +100,12 @@ services:
 
   triplestore:
     container_name: triplestore
+    hostname: triplestore
     build:
       context: ./triplestore
       dockerfile: Dockerfile
     ports:
+      - 8006:8000
       - 9006:9000
     networks:
       - cloud
@@ -103,6 +117,7 @@ services:
   artemis:
     image: vromero/activemq-artemis:latest
     container_name: artemis
+    hostname: artemis
     ports:
       - 8161:8161
     environment:
