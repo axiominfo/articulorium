@@ -60,7 +60,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8003:8000
-      - 9003:9000
     networks:
       - cloud
     depends_on:
@@ -78,7 +77,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8004:8000
-      - 9004:9000
     networks:
       - cloud
     depends_on:

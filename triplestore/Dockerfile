@@ -1,7 +1,6 @@
 # build base image
 FROM openjdk:14.0.1-slim
 
-EXPOSE 8000
 EXPOSE 9000
 
 # set deployment directory
