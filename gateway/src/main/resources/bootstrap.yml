@@ -26,18 +26,14 @@ spring:
         - id: articulorum-ldp
           uri: lb://articulorum-ldp
           predicates:
-            - Path=/ldp
-            - Path=/ldp/**
+            - Path=/ldp,/ldp/**
           filters:
-            - RewritePath=/ldp, /
-            - RewritePath=/ldp/(?<segment>.*), /$\{segment}
+            - StripPrefix=1
         - id: articulorum-ldpath
           uri: lb://articulorum-ldpath
           predicates:
-            - Path=/ldpath
-            - Path=/ldpath/**
+            - Path=/ldpath,/ldpath/**
           filters:
-            - RewritePath=/ldpath, /
-            - RewritePath=/ldpath/(?<segment>.*), /$\{segment}
+            - StripPrefix=1
 
     loadbalancer.ribbon.enabled: false
