@@ -7,10 +7,10 @@ version: '3.8'
 
 services:
 
-  gateway:
-    container_name: gateway
+  config:
+    container_name: config
     build:
-      context: ./gateway
+      context: ./config
       dockerfile: Dockerfile
     ports:
       - 9000:9000
@@ -19,13 +19,37 @@ services:
     depends_on:
       - consul-server-bootstrap
 
-  api:
-    container_name: api
+  discovery:
+    container_name: discovery
     build:
-      context: ./api
+      context: ./discovery
       dockerfile: Dockerfile
     ports:
       - 9001:9000
+    networks:
+      - cloud
+    depends_on:
+      - consul-server-bootstrap
+
+  gateway:
+    container_name: gateway
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - 9002:9000
+    networks:
+      - cloud
+    depends_on:
+      - consul-server-bootstrap
+
+  ldp:
+    container_name: ldp
+    build:
+      context: ./ldp
+      dockerfile: Dockerfile
+    ports:
+      - 9003:9000
     networks:
       - cloud
     depends_on:
@@ -38,18 +62,21 @@ services:
       context: ./ldpath
       dockerfile: Dockerfile
     ports:
-      - 9002:9000
+      - 9004:9000
     networks:
       - cloud
     depends_on:
       - consul-server-bootstrap
       - artemis
+      - ldp
 
   index:
     container_name: index
     build:
       context: ./index
       dockerfile: Dockerfile
+    ports:
+      - 9005:9000
     networks:
       - cloud
     depends_on:
@@ -64,22 +91,14 @@ services:
     build:
       context: ./triplestore
       dockerfile: Dockerfile
+    ports:
+      - 9006:9000
     networks:
       - cloud
     depends_on:
       - consul-server-bootstrap
       - artemis
       - blazegraph
-
-  config:
-    container_name: config
-    build:
-      context: ./config
-      dockerfile: Dockerfile
-    networks:
-      - cloud
-    depends_on:
-      - consul-server-bootstrap
 
   artemis:
     image: vromero/activemq-artemis:latest
@@ -97,7 +116,7 @@ services:
     container_name: solr1
     hostname: solr1
     ports:
-      - 8981:8983
+      - 8983:8983
     environment:
       - ZK_HOST=zoo1:2181,zoo2:2181,zoo3:2181
       - SOLR_HOST=solr1
@@ -112,7 +131,7 @@ services:
     container_name: solr2
     hostname: solr2
     ports:
-      - 8982:8983
+      - 8984:8983
     environment:
       - ZK_HOST=zoo1:2181,zoo2:2181,zoo3:2181
       - SOLR_HOST=solr2
@@ -127,7 +146,7 @@ services:
     container_name: solr3
     hostname: solr3
     ports:
-      - 8983:8983
+      - 8985:8983
     environment:
       - ZK_HOST=zoo1:2181,zoo2:2181,zoo3:2181
       - SOLR_HOST=solr3

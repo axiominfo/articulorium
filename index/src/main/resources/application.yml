@@ -40,5 +40,5 @@ spring:
     pub-sub-domain: true
 
   main:
-    lazy-initialization: false
+    lazy-initialization: true
     # web-application-type: NONE

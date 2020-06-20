@@ -1,6 +1,6 @@
 ldpath:
   name: Articulorum Web API
-  namespace: http://api:9000
+  namespace: http://ldp:9000/api
   default-expiry: 5
   cache-location: cache
 

@@ -23,9 +23,10 @@
   <modules>
     <module>domain</module>
     <module>messaging</module>
-    <module>gateway</module>
     <module>config</module>
-    <module>api</module>
+    <module>discovery</module>
+    <module>gateway</module>
+    <module>ldp</module>
     <module>ldpath</module>
     <module>index</module>
     <module>triplestore</module>
@@ -35,7 +36,7 @@
 
   <properties>
     <com.build.sourceEncoding>UTF-8</com.build.sourceEncoding>
-    <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
+    <spring-cloud.version>Hoxton.SR5</spring-cloud.version>
   </properties>
 
   <dependencies>
