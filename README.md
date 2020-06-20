@@ -6,5 +6,8 @@ Linked data platform using [spring-cloud-consul](https://cloud.spring.io/spring-
 
 ## Todo
 
-- Switch artemis to Kafka and use [spring-cloud-bus](https://cloud.spring.io/spring-cloud-bus).
-- Setup [spring-cloud-gateway](https://cloud.spring.io/spring-cloud-gateway).
+- Switch Artemis to Kafka.
+- Setup [spring-cloud-bus](https://cloud.spring.io/spring-cloud-bus).
+  - have index use bus
+  - have triplestore use bus
+  - have ldpath use bus

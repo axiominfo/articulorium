@@ -19,6 +19,8 @@ import javax.persistence.EntityNotFoundException;
 import com.articulorum.domain.Container;
 import com.articulorum.ldp.service.ContainerService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +37,8 @@ import org.springframework.web.util.UriComponents;
 @RestController
 public class LdpController {
 
+    private final static Logger LOG = LoggerFactory.getLogger(LdpController.class);
+
     public final static String ROOT = SLASH;
     public final static String ANT_PATH = "/**/*";
 
@@ -50,6 +54,9 @@ public class LdpController {
     public @ResponseBody Container get() throws IOException {
         final UriComponents uriComponents = fromCurrentRequest().build();
         final String path = getPath(uriComponents);
+
+        LOG.info("GET {}", path);
+
         final Optional<Container> container = containerService.findByPath(path);
         if (!container.isPresent()) {
             throw new EntityNotFoundException(format(NOT_FOUND_TEMPLATE, path));
@@ -66,6 +73,8 @@ public class LdpController {
         final String basePath = getPath(uriComponents);
         final String currentPath = slug.isPresent() ? slug.get() : id.toString();
         final String path = isEmpty(basePath) ? currentPath : join(SLASH, basePath, currentPath);
+
+        LOG.info("POST {}", path);
 
         if (containerService.existsByPath(path)) {
             throw new EntityExistsException(format(ALREADY_EXISTS_TEMPLATE, path));
@@ -93,6 +102,8 @@ public class LdpController {
         final UriComponents uriComponents = fromCurrentRequest().build();
         final String path = getPath(uriComponents);
         final String uri = uriComponents.toUriString();
+
+        LOG.info("DELETE {}", path);
 
         final Optional<Container> container = containerService.findByPath(path);
 

@@ -18,4 +18,26 @@ spring:
         instanceId: ${spring.application.name}:${random.value}
         serviceName: articulorum-${spring.application.name}
 
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: articulorum-ldp
+          uri: lb://articulorum-ldp
+          predicates:
+            - Path=/ldp
+            - Path=/ldp/**
+          filters:
+            - RewritePath=/ldp, /
+            - RewritePath=/ldp/(?<segment>.*), /$\{segment}
+        - id: articulorum-ldpath
+          uri: lb://articulorum-ldpath
+          predicates:
+            - Path=/ldpath
+            - Path=/ldpath/**
+          filters:
+            - RewritePath=/ldpath, /
+            - RewritePath=/ldpath/(?<segment>.*), /$\{segment}
+
     loadbalancer.ribbon.enabled: false
