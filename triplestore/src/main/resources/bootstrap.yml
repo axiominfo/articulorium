@@ -1,0 +1,21 @@
+spring:
+
+  application:
+    name: triplestore
+
+  cloud:
+    consul:
+
+      config:
+        enabled: true
+
+      host: consul-server-bootstrap
+      port: 8500
+
+      discovery:
+        healthCheckPath: /actuator/health
+        healthCheckInterval: 60s
+        instanceId: ${spring.application.name}:${random.value}
+        serviceName: articulorum-${spring.application.name}
+
+    loadbalancer.ribbon.enabled: false

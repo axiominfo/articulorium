@@ -51,7 +51,7 @@ public class LdpController {
         final UriComponents uriComponents = fromCurrentRequest().build();
         final String path = getPath(uriComponents);
         final Optional<Container> container = containerService.findByPath(path);
-        if (container.isEmpty()) {
+        if (!container.isPresent()) {
             throw new EntityNotFoundException(format(NOT_FOUND_TEMPLATE, path));
         }
         return container.get();
@@ -76,7 +76,7 @@ public class LdpController {
 
         Optional<Container> parent = containerService.findByPath(basePath);
 
-        if (parent.isEmpty()) {
+        if (!parent.isPresent()) {
             throw new EntityNotFoundException(format(NOT_FOUND_TEMPLATE, basePath));    
         }
 
@@ -96,14 +96,14 @@ public class LdpController {
 
         final Optional<Container> container = containerService.findByPath(path);
 
-        if (container.isEmpty()) {
+        if (!container.isPresent()) {
             throw new EntityNotFoundException(format(NOT_FOUND_TEMPLATE, path));
         }
 
         final String parentPath = getParentPath(uriComponents);
         final Optional<Container> parent = containerService.findByPath(parentPath);
 
-        if (parent.isEmpty()) {
+        if (!parent.isPresent()) {
             throw new EntityNotFoundException(format(PARENT_NOT_FOUND_TEMPLATE, parentPath));
         }
 

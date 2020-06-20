@@ -4,13 +4,13 @@ FROM openjdk:14.0.1-slim
 EXPOSE 9000
 
 # set deployment directory
-WORKDIR /articulorum/api
+WORKDIR /articulorum/config
 
 # copy over the built artifact
-COPY ./target/api*.jar ./articulorum-api.jar
+COPY ./target/config*.jar ./articulorum-config.jar
 
 COPY ./wait-for-it.sh ./wait-for-it.sh
 RUN chmod +x wait-for-it.sh
 
 # set the startup command to run your binary
-CMD ["./wait-for-it.sh", "-t", "60", "http://consul-server-bootstrap:8500", "--", "java", "-jar", "./articulorum-api.jar"]
+CMD ["./wait-for-it.sh", "-t", "90", "http://consul-server-bootstrap:8500", "--", "java", "-jar", "./articulorum-config.jar"]

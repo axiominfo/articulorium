@@ -1,19 +1,9 @@
 server:
-  port: 8080
+  port: 9000
   servlet:
     context-path:
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://eureka:8761/eureka
-  instance:
-    preferIpAddress: true
-
 spring:
-
-  application:
-    name: api
 
   artemis:
     mode: native
