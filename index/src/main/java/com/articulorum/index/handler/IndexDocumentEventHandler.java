@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.articulorum.event.RemoteEvent;
-import com.articulorum.event.handler.RemoteEventHandler;
+import com.articulorum.event.DocumentEvent;
+import com.articulorum.event.handler.DocumentEventHandler;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.common.SolrInputDocument;
@@ -16,14 +16,14 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class DocumentEventHandler implements RemoteEventHandler<Map<String, Collection<?>>> {
+public class IndexDocumentEventHandler implements DocumentEventHandler {
 
     @Autowired
     private SolrClient solrClient;
 
     @Override
-    public void handle(RemoteEvent<Map<String, Collection<?>>> event) {
-        Map<String, Collection<?>> document = event.getPayload();
+    public void handle(DocumentEvent event) {
+        Map<String, Collection<?>> document = event.getDocument();
         String id = (String) ((List<?>) document.get("id")).get(0);
         switch (event.getAction()) {
             case CREATED:

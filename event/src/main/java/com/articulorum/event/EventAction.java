@@ -1,5 +1,5 @@
 package com.articulorum.event;
 
-public enum RemoteEventAction {
+public enum EventAction {
     CREATED, UPDATED, DELETED;
 }

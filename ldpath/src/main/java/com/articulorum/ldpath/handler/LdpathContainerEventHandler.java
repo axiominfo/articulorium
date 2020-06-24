@@ -5,8 +5,9 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.articulorum.domain.Container;
-import com.articulorum.event.RemoteEvent;
-import com.articulorum.event.handler.RemoteEventHandler;
+import com.articulorum.event.ContainerEvent;
+import com.articulorum.event.DocumentEvent;
+import com.articulorum.event.handler.ContainerEventHandler;
 import com.articulorum.ldpath.service.LdPathService;
 
 import org.apache.marmotta.ldpath.exception.LDPathParseException;
@@ -19,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class ContainerEventHandler implements RemoteEventHandler<Container> {
+public class LdpathContainerEventHandler implements ContainerEventHandler {
 
     @Autowired
     private LdPathService ldPathService;
@@ -31,15 +32,15 @@ public class ContainerEventHandler implements RemoteEventHandler<Container> {
     private BusProperties busProperties;
 
     @Override
-    public void handle(RemoteEvent<Container> event) {
-        Container container = event.getPayload();
+    public void handle(ContainerEvent event) {
+        Container container = event.getContainer();
         final String originService = busProperties.getId();
         try {
             Map<String, Collection<?>> document = ldPathService.programQuery(container.getPath());
             log.info("EMIT {}, DOCUMENT {}, ORIGIN {}", event.getAction(), container.getId(), originService);
-            publisher.publishEvent(new RemoteEvent<Map<String, Collection<?>>>(this, originService, document, event.getAction()));
+            publisher.publishEvent(new DocumentEvent(this, originService, document, event.getAction()));
         } catch (LDPathParseException | IOException e) {
-            log.warn("Failed to process ldpath for container {}" , container.getId());
+            log.warn("Failed to process ldpath for container {}", container.getId());
             if (log.isDebugEnabled()) {
                 e.printStackTrace();
             }

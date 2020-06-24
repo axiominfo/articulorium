@@ -3,7 +3,7 @@ package com.articulorum.ldp.service;
 import java.util.Optional;
 
 import com.articulorum.domain.Container;
-import com.articulorum.event.RemoteEventAction;
+import com.articulorum.event.EventAction;
 
 public interface ContainerService {
 
@@ -15,6 +15,6 @@ public interface ContainerService {
 
     void delete(Container parent, Container container, String uri);
 
-    void emit(Container container, RemoteEventAction action);
+    void emit(Container container, EventAction action);
 
 }

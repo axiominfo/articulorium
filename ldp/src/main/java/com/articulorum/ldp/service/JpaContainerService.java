@@ -12,8 +12,8 @@ import java.util.Optional;
 import com.articulorum.domain.Container;
 import com.articulorum.domain.Element;
 import com.articulorum.domain.repo.ContainerRepo;
-import com.articulorum.event.RemoteEvent;
-import com.articulorum.event.RemoteEventAction;
+import com.articulorum.event.ContainerEvent;
+import com.articulorum.event.EventAction;
 import com.articulorum.ldp.utility.LdpPredicate;
 import com.articulorum.ldp.utility.RdfType;
 
@@ -79,7 +79,7 @@ public class JpaContainerService implements ContainerService {
 
                 // update
                 Container updatedContainer = containerRepo.save(memberContainer.get());
-                emit(updatedContainer, RemoteEventAction.UPDATED);
+                emit(updatedContainer, EventAction.UPDATED);
             }
         }
 
@@ -104,11 +104,11 @@ public class JpaContainerService implements ContainerService {
 
         // update
         Container updatedContainer = containerRepo.save(parent);
-        emit(updatedContainer, RemoteEventAction.UPDATED);
+        emit(updatedContainer, EventAction.UPDATED);
 
         // create
         Container createdContainer = containerRepo.save(container);
-        emit(createdContainer, RemoteEventAction.CREATED);
+        emit(createdContainer, EventAction.CREATED);
 
         return uri;
     }
@@ -150,7 +150,7 @@ public class JpaContainerService implements ContainerService {
 
                 // update
                 Container updatedContainer = containerRepo.save(memberContainer.get());
-                emit(updatedContainer, RemoteEventAction.UPDATED);
+                emit(updatedContainer, EventAction.UPDATED);
             }
         }
 
@@ -158,18 +158,18 @@ public class JpaContainerService implements ContainerService {
 
         // update
         Container updatedContainer = containerRepo.save(parent);
-        emit(updatedContainer, RemoteEventAction.UPDATED);
+        emit(updatedContainer, EventAction.UPDATED);
 
         // delete
         containerRepo.delete(container);
-        emit(container, RemoteEventAction.DELETED);
+        emit(container, EventAction.DELETED);
     }
 
     @Override
-    public void emit(Container container, RemoteEventAction action) {
+    public void emit(Container container, EventAction action) {
         final String originService = busProperties.getId();
         log.info("EMIT {}, CONTAINER {}, ORIGIN {}", action, container.getId(), originService);
-        publisher.publishEvent(new RemoteEvent<Container>(this, originService, container, action));
+        publisher.publishEvent(new ContainerEvent(this, originService, container, action));
     }
 
 }

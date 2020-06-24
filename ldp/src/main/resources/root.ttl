@@ -2,6 +2,6 @@
 @prefix ldp:   <http://www.w3.org/ns/ldp#> .
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 
-<http://localhost:8080/>
+<http://ldp:9000/>
         a           ldp:BasicContainer , ldp:Container , ldp:RDFSource ;
         rdfs:label  "articulorum" .

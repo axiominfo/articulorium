@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import com.articulorum.domain.Container;
 import com.articulorum.domain.Element;
-import com.articulorum.event.RemoteEvent;
-import com.articulorum.event.handler.RemoteEventHandler;
+import com.articulorum.event.ContainerEvent;
+import com.articulorum.event.handler.ContainerEventHandler;
 import com.articulorum.triplestore.service.RemoteRepositoryService;
 import com.bigdata.rdf.sail.remote.BigdataSailRemoteRepositoryConnection;
 
@@ -24,14 +24,14 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
-public class TripleContainerEventHandler implements RemoteEventHandler<Container> {
+public class TriplestoreContainerEventHandler implements ContainerEventHandler {
 
     @Autowired
     private RemoteRepositoryService remoteRepositoryService;
 
     @Override
-    public void handle(RemoteEvent<Container> event) {
-        Container container = event.getPayload();
+    public void handle(ContainerEvent event) {
+        Container container = event.getContainer();
         UUID id = container.getId();
         try {
             BigdataSailRemoteRepositoryConnection connection = remoteRepositoryService.getConnection();
