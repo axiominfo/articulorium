@@ -12,13 +12,19 @@ import java.util.Optional;
 import com.articulorum.domain.Container;
 import com.articulorum.domain.Element;
 import com.articulorum.domain.repo.ContainerRepo;
-import com.articulorum.ldp.producer.ContainerProducer;
+import com.articulorum.event.RemoteEvent;
+import com.articulorum.event.RemoteEventAction;
 import com.articulorum.ldp.utility.LdpPredicate;
 import com.articulorum.ldp.utility.RdfType;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.bus.BusProperties;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class JpaContainerService implements ContainerService {
 
@@ -26,7 +32,10 @@ public class JpaContainerService implements ContainerService {
     private ContainerRepo containerRepo;
 
     @Autowired
-    private ContainerProducer eventProducer;
+    private ApplicationEventPublisher publisher;
+
+    @Autowired
+    private BusProperties busProperties;
 
     @Override
     public boolean existsByPath(String path) {
@@ -70,8 +79,7 @@ public class JpaContainerService implements ContainerService {
 
                 // update
                 Container updatedContainer = containerRepo.save(memberContainer.get());
-
-                eventProducer.sendUpdated(updatedContainer);
+                emit(updatedContainer, RemoteEventAction.UPDATED);
             }
         }
 
@@ -96,11 +104,11 @@ public class JpaContainerService implements ContainerService {
 
         // update
         Container updatedContainer = containerRepo.save(parent);
-        eventProducer.sendUpdated(updatedContainer);
+        emit(updatedContainer, RemoteEventAction.UPDATED);
 
         // create
         Container createdContainer = containerRepo.save(container);
-        eventProducer.sendCreated(createdContainer);
+        emit(createdContainer, RemoteEventAction.CREATED);
 
         return uri;
     }
@@ -112,8 +120,7 @@ public class JpaContainerService implements ContainerService {
 
         container.getElementsByAttribute(LdpPredicate.CONTAINS).stream()
             .map(element -> containerRepo.findByPath(removeStart(element.getValue().replace(baseUri, EMPTY), SLASH)))
-            .filter(child -> child.isPresent())
-            .map(child -> child.get())
+            .filter(child -> child.isPresent()).map(child -> child.get())
             .forEach(child -> delete(container, child, join(SLASH, removeEnd(baseUri, SLASH), child.getPath())));
 
         Optional<Element> parentDirectContainer = parent.getElementByAttribute(LdpPredicate.DIRECT_CONTAINER);
@@ -143,7 +150,7 @@ public class JpaContainerService implements ContainerService {
 
                 // update
                 Container updatedContainer = containerRepo.save(memberContainer.get());
-                eventProducer.sendUpdated(updatedContainer);
+                emit(updatedContainer, RemoteEventAction.UPDATED);
             }
         }
 
@@ -151,11 +158,18 @@ public class JpaContainerService implements ContainerService {
 
         // update
         Container updatedContainer = containerRepo.save(parent);
-        eventProducer.sendUpdated(updatedContainer);
+        emit(updatedContainer, RemoteEventAction.UPDATED);
 
         // delete
         containerRepo.delete(container);
-        eventProducer.sendDeleted(container);
+        emit(container, RemoteEventAction.DELETED);
+    }
+
+    @Override
+    public void emit(Container container, RemoteEventAction action) {
+        final String originService = busProperties.getId();
+        log.info("EMIT {}, CONTAINER {}, ORIGIN {}", action, container.getId(), originService);
+        publisher.publishEvent(new RemoteEvent<Container>(this, originService, container, action));
     }
 
 }

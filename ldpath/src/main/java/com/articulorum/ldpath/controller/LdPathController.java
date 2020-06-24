@@ -1,5 +1,7 @@
 package com.articulorum.ldpath.controller;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -7,7 +9,6 @@ import java.util.Map;
 
 import com.articulorum.ldpath.service.LdPathService;
 
-import static org.apache.commons.lang3.StringUtils.EMPTY;;
 import org.apache.marmotta.ldpath.exception.LDPathParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,13 +27,15 @@ public class LdPathController {
 
     @GetMapping("/")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody Map<String, Collection<?>> get(@RequestParam(required = true, defaultValue = EMPTY) String path) throws LDPathParseException, IOException {
+    public @ResponseBody Map<String, Collection<?>> get(@RequestParam(required = true, defaultValue = EMPTY) String path)
+            throws LDPathParseException, IOException {
         return ldpathService.programQuery(path);
     }
 
     @PostMapping("/")
     @ResponseStatus(value = HttpStatus.OK)
-    public @ResponseBody Map<String, Collection<?>> get(@RequestParam(required = true, defaultValue = EMPTY) String path, InputStream program) throws LDPathParseException, IOException {
+    public @ResponseBody Map<String, Collection<?>> get(@RequestParam(required = true, defaultValue = EMPTY) String path, InputStream program)
+            throws LDPathParseException, IOException {
         return ldpathService.programQuery(path, program);
     }
 

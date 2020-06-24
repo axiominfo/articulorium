@@ -4,17 +4,15 @@ spring:
     name: gateway
 
   cloud:
-    consul:
 
-      config:
-        enabled: true
+    consul:
 
       host: consul-server-bootstrap
       port: 8500
 
       discovery:
         healthCheckPath: /actuator/health
-        healthCheckInterval: 30s
+        healthCheckInterval: 15s
         instanceId: ${spring.application.name}:${random.value}
         serviceName: articulorum-${spring.application.name}
 
@@ -36,4 +34,6 @@ spring:
           filters:
             - StripPrefix=1
 
-    loadbalancer.ribbon.enabled: false
+    loadbalancer:
+      ribbon:
+        enabled: false

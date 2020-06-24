@@ -1,5 +1,8 @@
 spring:
 
+  autoconfigure:
+    exclude: org.springframework.cloud.stream.test.binder.TestSupportBinderAutoConfiguration
+
   datasource:
     platform: h2
     url: jdbc:h2:mem:AZ;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE

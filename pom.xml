@@ -8,7 +8,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.3.0.RELEASE</version>
+    <version>2.3.1.RELEASE</version>
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
@@ -22,7 +22,7 @@
 
   <modules>
     <module>domain</module>
-    <module>messaging</module>
+    <module>event</module>
     <module>gateway</module>
     <module>ldp</module>
     <module>ldpath</module>

@@ -1,4 +1,4 @@
-package com.articulorum.triplestore.config;
+package com.articulorum.triplestore.listener;
 
 import java.util.Properties;
 
@@ -12,14 +12,17 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
-public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
+public class ApplicationReadyEventListener implements ApplicationListener<ApplicationReadyEvent> {
 
     @Autowired
     private RemoteRepositoryManager remoteRepositoryManager;
 
     @Override
-    public void onApplicationEvent(final ApplicationReadyEvent event) {
+    public void onApplicationEvent(ApplicationReadyEvent event) {
         final String namespace = "test";
         final Properties properties = new Properties();
         properties.setProperty("com.bigdata.rdf.sail.namespace", namespace);
@@ -28,7 +31,10 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
                 remoteRepositoryManager.createRepository(namespace, properties);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.warn("Failed to create store {}", "test");
+            if (log.isDebugEnabled()) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -37,7 +43,8 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
         try {
             while (res.hasNext()) {
                 final Statement stmt = res.next();
-                if (stmt.getPredicate().toString().equals(SD.KB_NAMESPACE.stringValue()) && namespace.equals(stmt.getObject().stringValue())) {
+                if (stmt.getPredicate().toString().equals(SD.KB_NAMESPACE.stringValue())
+                    && namespace.equals(stmt.getObject().stringValue())) {
                     return true;
                 }
             }

@@ -13,4 +13,4 @@ COPY ./wait-for-it.sh ./wait-for-it.sh
 RUN chmod +x wait-for-it.sh
 
 # set the startup command to run your binary
-CMD ["./wait-for-it.sh", "-t", "60", "http://blazegraph:8080/bigdata", "--", "./wait-for-it.sh", "-t", "60", "http://consul-server-bootstrap:8500", "--", "java", "-jar", "./articulorum-triplestore.jar"]
+CMD ["./wait-for-it.sh", "http://consul-server-bootstrap:8500", "--", "./wait-for-it.sh", "http://ldp:9000", "--", "./wait-for-it.sh", "http://blazegraph:8080/bigdata/#splash", "--", "java", "-jar", "./articulorum-triplestore.jar"]

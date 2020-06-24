@@ -14,4 +14,4 @@ COPY ./wait-for-it.sh ./wait-for-it.sh
 RUN chmod +x wait-for-it.sh
 
 # set the startup command to run your binary
-CMD ["./wait-for-it.sh", "-t", "60", "http://api:9000", "--", "./wait-for-it.sh", "-t", "60", "http://consul-server-bootstrap:8500", "--", "java", "-jar", "./articulorum-ldpath.jar"]
+CMD ["./wait-for-it.sh", "http://consul-server-bootstrap:8500", "--", "./wait-for-it.sh", "http://ldp:9000", "--", "java", "-jar", "./articulorum-ldpath.jar"]

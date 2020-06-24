@@ -1,4 +1,4 @@
-package com.articulorum.index.config;
+package com.articulorum.index.listener;
 
 import java.io.IOException;
 
@@ -12,21 +12,26 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
-public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
+public class ApplicationReadyEventListener implements ApplicationListener<ApplicationReadyEvent> {
 
     @Autowired
     private SolrClient solrClient;
 
     @Override
-    public void onApplicationEvent(final ApplicationReadyEvent event) {
+    public void onApplicationEvent(ApplicationReadyEvent event) {
         try {
-            if (hasCollection("test")) {
-                return;
+            if (!hasCollection("test")) {
+                createCollection("test");
             }
-            createCollection("test");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SolrServerException | IOException e) {
+            log.warn("Failed to create collection {}" , "test");
+            if (log.isDebugEnabled()) {
+                e.printStackTrace();
+            }
         }
     }
 
