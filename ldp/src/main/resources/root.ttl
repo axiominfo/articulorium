@@ -1,7 +1,0 @@
-@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix ldp:   <http://www.w3.org/ns/ldp#> .
-@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
-
-<http://ldp:9000/>
-        a           ldp:BasicContainer , ldp:Container , ldp:RDFSource ;
-        rdfs:label  "articulorum" .

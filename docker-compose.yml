@@ -16,11 +16,11 @@ services:
     depends_on:
       - consul-server-bootstrap
 
-  ldp:
-    container_name: ldp
-    hostname: ldp
+  platform:
+    container_name: platform
+    hostname: platform
     build:
-      context: ./ldp
+      context: ./platform
       dockerfile: Dockerfile
     ports:
       - 8001:8000
@@ -31,11 +31,11 @@ services:
       - consul-server-bootstrap
       - kafka
 
-  ldpath:
-    container_name: ldpath
-    hostname: ldpath
+  transform:
+    container_name: transform
+    hostname: transform
     build:
-      context: ./ldpath
+      context: ./transform
       dockerfile: Dockerfile
     ports:
       - 8002:8000
@@ -45,7 +45,7 @@ services:
     depends_on:
       - consul-server-bootstrap
       - kafka
-      - ldp
+      - platform
 
   index:
     container_name: index
@@ -63,7 +63,7 @@ services:
       - solr1
       - solr2
       - solr3
-      - ldpath
+      - transform
 
   triplestore:
     container_name: triplestore
@@ -79,7 +79,7 @@ services:
       - consul-server-bootstrap
       - kafka
       - blazegraph
-      - ldp
+      - platform
 
   cmak:
     image: hlebalbau/kafka-manager:latest
