@@ -7,14 +7,17 @@ spring:
 
     consul:
 
-      host: consul-server-bootstrap
-      port: 8500
+      config:
+        enabled: true
 
       discovery:
         healthCheckPath: /actuator/health
         healthCheckInterval: 15s
         instanceId: ${spring.application.name}:${random.value}
         serviceName: articulorum-${spring.application.name}
+
+      host: consul-server-bootstrap
+      port: 8500
 
     gateway:
       discovery:
