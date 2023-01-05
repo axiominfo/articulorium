@@ -1,4 +1,4 @@
-![Java CI with Maven](https://github.com/wwelling/articulorum/workflows/maven_build/badge.svg)
+![Java CI with Maven](https://github.com/axiominfo/articulorium/workflows/maven_build/badge.svg)
 
 # Articulorum
 
